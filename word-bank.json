@@ -1,0 +1,148 @@
+{
+  "天氣Weather": [
+    {
+      "id": "天氣Weather-1",
+      "index": 1,
+      "zh": "晴天",
+      "en": "Sunny",
+      "emoji": "☀️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-2",
+      "index": 2,
+      "zh": "多雲",
+      "en": "Cloudy",
+      "emoji": "🌥️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-3",
+      "index": 3,
+      "zh": "雨天",
+      "en": "Rainy",
+      "emoji": "🌧️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-4",
+      "index": 4,
+      "zh": "陰天",
+      "en": "Overcast",
+      "emoji": "☁️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-5",
+      "index": 5,
+      "zh": "雷雨",
+      "en": "Stormy",
+      "emoji": "⛈️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-6",
+      "index": 6,
+      "zh": "有風",
+      "en": "Windy",
+      "emoji": "🌬️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-7",
+      "index": 7,
+      "zh": "下雪",
+      "en": "Snowy",
+      "emoji": "❄️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-8",
+      "index": 8,
+      "zh": "彩虹",
+      "en": "Rainbow",
+      "emoji": "🌈",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-9",
+      "index": 9,
+      "zh": "起霧",
+      "en": "Foggy",
+      "emoji": "🌫️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-10",
+      "index": 10,
+      "zh": "炎熱",
+      "en": "Hot",
+      "emoji": "🥵",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-11",
+      "index": 11,
+      "zh": "寒冷",
+      "en": "Cold",
+      "emoji": "🥶",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-12",
+      "index": 12,
+      "zh": "龍卷風",
+      "en": "Tornado",
+      "emoji": "🌪️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-13",
+      "index": 13,
+      "zh": "颱風",
+      "en": "Typhoon",
+      "emoji": "🌀",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-14",
+      "index": 14,
+      "zh": "多雲時晴",
+      "en": "Partly Sunny",
+      "emoji": "🌤️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-15",
+      "index": 15,
+      "zh": "毛毛雨",
+      "en": "Drizzle",
+      "emoji": "🌦️",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-17",
+      "index": 17,
+      "zh": "星星",
+      "en": "Stars",
+      "emoji": "⭐",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-18",
+      "index": 18,
+      "zh": "月亮",
+      "en": "Moon",
+      "emoji": "🌙",
+      "img": ""
+    },
+    {
+      "id": "天氣Weather-19",
+      "index": 19,
+      "zh": "太陽",
+      "en": "Sun",
+      "emoji": "🌞",
+      "img": ""
+    }
+  ]
+}
