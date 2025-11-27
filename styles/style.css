@@ -237,3 +237,753 @@ main {
 .game-intro a {
   color: #0066cc;
 }
+
+/* -------- 遊戲主畫面基底 -------- */
+
+.game-header {
+  padding: 16px 20px 10px;
+}
+
+.game-subtitle {
+  margin: 0 20px 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.game-main-wrapper {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  padding: 0 16px 24px;
+  display: flex;
+  gap: 16px;
+}
+
+.game-sidebar {
+  width: 220px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 16px 18px;
+  box-shadow: 0 4px 12px rgba(15, 35, 95, 0.1);
+  font-size: 14px;
+}
+
+.game-sidebar h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.sidebar-tip {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.sidebar-back-btn {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.game-main {
+  flex: 1;
+}
+
+/* 階段切換按鈕 */
+.stage-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.stage-tab-button {
+  flex: 1 1 auto;
+  min-width: 160px;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #e1e8ff;
+  color: #234;
+  transition: background-color 0.12s ease, transform 0.08s ease;
+}
+
+.stage-tab-button.active {
+  background: #4e7fff;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* 各階段面板 */
+.stage-panel {
+  display: none;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px 20px;
+  box-shadow: 0 4px 14px rgba(15, 35, 95, 0.14);
+}
+
+.stage-panel.active {
+  display: block;
+}
+
+.stage-header-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.stage-header-line h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.stage-note {
+  font-size: 13px;
+  color: #555;
+  margin-top: 4px;
+  margin-bottom: 10px;
+}
+
+.stage-status {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* 共同小提醒文字顏色 */
+.stage-feedback {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.stage-feedback.ok {
+  color: #1b7a33;
+}
+
+.stage-feedback.error {
+  color: #c0392b;
+}
+
+/* -------- 第 1 階段 -------- */
+
+.stage1-layout {
+  display: flex;
+  gap: 14px;
+}
+
+.stage1-list {
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+
+.stage1-detail {
+  flex: 1;
+}
+
+.word-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.word-card {
+  background: #f4f7ff;
+  border-radius: 14px;
+  border: none;
+  padding: 10px 6px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  font-size: 14px;
+}
+
+.word-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+}
+
+.word-card-img span {
+  font-size: 32px;
+}
+
+.word-card-img img {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.word-card-en {
+  font-weight: 600;
+}
+
+/* 右側單字卡 */
+.stage1-card {
+  margin-top: 6px;
+  border-radius: 16px;
+  background: #f8f9ff;
+  padding: 12px 14px 14px;
+}
+
+.stage1-card.hidden {
+  display: none;
+}
+
+.stage1-main-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.stage1-img span {
+  font-size: 60px;
+}
+
+.stage1-img img {
+  max-width: 80px;
+  max-height: 80px;
+}
+
+.stage1-en {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stage1-zh {
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.stage1-audio-buttons {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-audio {
+  background: #fff;
+  border-radius: 999px;
+  border: 1px solid #cfd7ff;
+  padding: 4px 10px;
+  font-size: 14px;
+}
+
+.btn-sm {
+  font-size: 14px;
+  padding: 4px 12px;
+}
+
+.stage1-spell-area {
+  margin-top: 10px;
+}
+
+.stage1-spell-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.stage1-spell-display {
+  margin-top: 6px;
+  min-height: 24px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.stage1-letters {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.letter-tile {
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.letter-tile.used {
+  opacity: 0.4;
+}
+
+/* -------- 第 2 階段：配對 -------- */
+
+.btn-orange {
+  background: #ff9f43;
+  color: #fff;
+}
+
+.btn-orange:hover {
+  background: #ff8f21;
+}
+
+.match-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.match-card {
+  flex: 0 0 calc(33.33% - 6px);
+  border-radius: 14px;
+  border: none;
+  background: #fdfdfd;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  padding: 10px 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+.match-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.match-card-zh {
+  background: #fff6e6;
+}
+
+.match-card-en {
+  background: #e9f4ff;
+}
+
+.match-card.selected {
+  outline: 2px solid #4e7fff;
+}
+
+.match-card.matched {
+  opacity: 0.3;
+}
+
+.match-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 999px;
+  background: #ccc;
+}
+
+.match-card-zh .match-tag {
+  background: #ffb347;
+}
+
+.match-card-en .match-tag {
+  background: #5b8bff;
+}
+
+/* -------- 第 3 階段：101 大樓 -------- */
+
+.stage3-layout {
+  display: flex;
+  gap: 14px;
+}
+
+.stage3-left {
+  flex: 1;
+}
+
+.stage3-right {
+  width: 260px;
+}
+
+.stage3-question-box {
+  border-radius: 12px;
+  background: #f8f9ff;
+  padding: 10px 12px;
+  position: relative;
+  min-height: 80px;
+}
+
+.stage3-question-type {
+  font-size: 14px;
+  color: #555;
+}
+
+.stage3-question-prompt {
+  margin-top: 4px;
+  font-size: 18px;
+}
+
+.question-zh {
+  font-size: 22px;
+}
+
+.question-img span {
+  font-size: 44px;
+}
+
+.question-img img {
+  max-width: 70px;
+  max-height: 70px;
+}
+
+.question-listen {
+  font-size: 16px;
+}
+
+.right-audio-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.stage3-options {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.stage3-option-card {
+  border-radius: 16px;
+  border: none;
+  background: #f4f7ff;
+  padding: 14px 10px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.stage3-bottom-buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.big-btn {
+  padding: 8px 16px;
+  font-size: 16px;
+}
+
+.building-panel {
+  background: #f3f6ff;
+  border-radius: 16px;
+  padding: 10px 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.building-header {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.building-visual-wrapper {
+  position: relative;
+  height: 220px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.building-tower {
+  width: 70px;
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(to top, #4e7fff, #89b4ff);
+  padding: 4px 2px 2px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.building-block {
+  height: 6px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.building-change {
+  position: absolute;
+  top: 16px;
+  right: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2ecc71;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.building-change.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.building-great {
+  position: absolute;
+  bottom: 12px;
+  right: 10px;
+  font-size: 16px;
+  color: #fffbea;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}
+
+/* -------- 第 4 階段：火車載貨 -------- */
+
+.stage4-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stage4-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f9ff;
+  padding: 8px 10px;
+  border-radius: 12px;
+}
+
+.stage4-img span {
+  font-size: 44px;
+}
+
+.stage4-img img {
+  max-width: 70px;
+  max-height: 70px;
+}
+
+.stage4-zh {
+  font-size: 20px;
+}
+
+.stage4-en-hint {
+  font-size: 14px;
+  color: #555;
+}
+
+.stage4-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.train-area {
+  position: relative;
+  height: 110px;
+  overflow: hidden;
+}
+
+.train-track {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #888;
+}
+
+.train {
+  position: absolute;
+  bottom: 18px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 1.6s ease;
+}
+
+.train-head {
+  font-size: 32px;
+}
+
+.train-cars {
+  display: flex;
+  gap: 4px;
+}
+
+.letter-slot {
+  min-width: 36px;
+  min-height: 40px;
+  border-radius: 8px;
+  border: 2px dashed #aaa;
+  background: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.letter-pool-wrapper {
+  background: #f8f9ff;
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.letter-pool-label {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.letter-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.big-letter {
+  min-width: 40px;
+  min-height: 40px;
+  font-size: 22px;
+}
+
+/* 火車動畫 */
+.train-move {
+  transform: translateX(-110%);
+}
+
+.train-leak {
+  animation: trainShake 0.3s ease-in-out 3;
+}
+
+@keyframes trainShake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.stage4-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.stage4-progress {
+  font-size: 14px;
+}
+
+/* -------- 煙火效果（共用） -------- */
+
+.fireworks-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.fireworks-overlay.hidden {
+  display: none;
+}
+
+.fireworks-content {
+  text-align: center;
+  color: #fff;
+}
+
+.fireworks-text {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.fireworks-area {
+  position: relative;
+  width: 260px;
+  height: 200px;
+}
+
+.firework {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffe066;
+  animation: explode 1.3s ease-out infinite;
+}
+
+.firework.f1 {
+  top: 50%;
+  left: 50%;
+}
+
+.firework.f2 {
+  top: 30%;
+  left: 20%;
+  animation-delay: 0.2s;
+  background: #ff7675;
+}
+
+.firework.f3 {
+  top: 25%;
+  left: 70%;
+  animation-delay: 0.4s;
+  background: #74b9ff;
+}
+
+.firework.f4 {
+  top: 70%;
+  left: 30%;
+  animation-delay: 0.1s;
+  background: #55efc4;
+}
+
+.firework.f5 {
+  top: 65%;
+  left: 75%;
+  animation-delay: 0.3s;
+  background: #fd79a8;
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-40px, -60px) scale(2);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(40px, 60px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* -------- RWD 大致調整 -------- */
+@media (max-width: 900px) {
+  .game-main-wrapper {
+    flex-direction: column;
+  }
+  .game-sidebar {
+    width: 100%;
+  }
+  .stage1-layout,
+  .stage3-layout {
+    flex-direction: column;
+  }
+  .stage3-right {
+    width: 100%;
+  }
+}
