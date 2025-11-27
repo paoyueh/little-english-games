@@ -6,14 +6,10 @@ let stage3CurrentWord = null;
 let stage3QuestionType = "zh"; // zh / img / listen
 let stage3Answered = false;
 let stage3GameOver = false;
+let stage3NextTimer = null;
 
 function initStage3Page() {
   renderGameInfoCommon();
-
-  document.getElementById("stage3-next").addEventListener("click", () => {
-    if (stage3GameOver) return;
-    nextStage3Question();
-  });
 
   document.getElementById("stage3-restart").addEventListener("click", () => {
     resetStage3Game();
@@ -31,6 +27,10 @@ function initStage3Page() {
 }
 
 function resetStage3Game() {
+  if (stage3NextTimer) {
+    clearTimeout(stage3NextTimer);
+    stage3NextTimer = null;
+  }
   stage3Floor = 0;
   stage3GameOver = false;
   stage3Answered = false;
@@ -38,8 +38,6 @@ function resetStage3Game() {
   const feedbackEl = document.getElementById("stage3-feedback");
   feedbackEl.textContent = "";
   feedbackEl.classList.remove("ok", "error");
-
-  document.getElementById("stage3-next").disabled = true;
 
   document.getElementById("stage3-question-type").textContent = "";
   document.getElementById("stage3-question-prompt").textContent = "";
@@ -51,13 +49,16 @@ function resetStage3Game() {
 
 function nextStage3Question() {
   if (stage3GameOver) return;
+  if (stage3NextTimer) {
+    clearTimeout(stage3NextTimer);
+    stage3NextTimer = null;
+  }
 
   const feedbackEl = document.getElementById("stage3-feedback");
   feedbackEl.textContent = "";
   feedbackEl.classList.remove("ok", "error");
 
   stage3Answered = false;
-  document.getElementById("stage3-next").disabled = true;
 
   // 隨機選一個單字
   const randIndex = Math.floor(Math.random() * ACTIVE_WORDS.length);
@@ -98,7 +99,6 @@ function renderStage3Options() {
   const container = document.getElementById("stage3-options");
   container.innerHTML = "";
 
-  // 正確答案 + 3 個其他選項
   const correctEn = stage3CurrentWord.en;
   const others = shuffleArray(
     ACTIVE_WORDS.filter((w) => w.en !== correctEn)
@@ -145,7 +145,6 @@ function onStage3OptionClick(btn) {
     feedbackEl.textContent = "再試一次喔～這題答錯了。";
     feedbackEl.classList.remove("ok");
     feedbackEl.classList.add("error");
-    // 英文 + 中文再試一次
     speak("Try again!", "en-US");
     setTimeout(() => {
       speak("再試一次！", "zh-TW");
@@ -156,7 +155,12 @@ function onStage3OptionClick(btn) {
     updateStage3FloorUI(oldFloor, stage3Floor, true);
   }
 
-  document.getElementById("stage3-next").disabled = false;
+  // 自動 3 秒後下一題
+  if (!stage3GameOver) {
+    stage3NextTimer = setTimeout(() => {
+      nextStage3Question();
+    }, 3000);
+  }
 }
 
 function updateStage3FloorUI(oldFloor, newFloor, isMinus = false) {
@@ -169,7 +173,7 @@ function updateStage3FloorUI(oldFloor, newFloor, isMinus = false) {
   sidebarFloor.textContent = newFloor;
   textFloor.textContent = `${newFloor} 層`;
 
-  // 重新畫大樓區塊（從下往上）
+  // 重新畫大樓區塊（高度固定，用 flex 分配）
   tower.innerHTML = "";
   for (let i = 0; i < newFloor; i++) {
     const block = document.createElement("div");
@@ -177,7 +181,6 @@ function updateStage3FloorUI(oldFloor, newFloor, isMinus = false) {
     tower.appendChild(block);
   }
 
-  // 顯示樓層變化 +10 / -5
   const diff = newFloor - oldFloor;
   if (diff !== 0) {
     changeEl.textContent = diff > 0 ? `+${diff}` : `${diff}`;
@@ -196,14 +199,16 @@ function updateStage3FloorUI(oldFloor, newFloor, isMinus = false) {
 
 function finishStage3Game() {
   stage3GameOver = true;
+  if (stage3NextTimer) {
+    clearTimeout(stage3NextTimer);
+    stage3NextTimer = null;
+  }
+
   const feedbackEl = document.getElementById("stage3-feedback");
   feedbackEl.textContent = "恭喜完成 101 大樓！可以按「再玩一次」重新挑戰。";
   feedbackEl.classList.remove("error");
   feedbackEl.classList.add("ok");
 
-  document.getElementById("stage3-next").disabled = true;
-
-  // 停止出題：清掉題目與選項
   document.getElementById("stage3-question-type").textContent =
     "任務完成";
   document.getElementById("stage3-question-prompt").textContent =
@@ -214,7 +219,6 @@ function finishStage3Game() {
 
   showFireworks("🎆 恭喜完成 101 大樓！", 3000);
 
-  // 將「重新開始」改為「再玩一次」文字（但功能一樣）
   const restartBtn = document.getElementById("stage3-restart");
   restartBtn.textContent = "🔁 再玩一次";
 }
