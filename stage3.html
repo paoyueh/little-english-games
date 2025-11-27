@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>第 3 階段 - 101 大樓蓋房子</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <header class="game-header">
+    <h1>第 3 階段：101 大樓蓋房子答題挑戰</h1>
+    <p class="game-subtitle">
+      隨機出現三種題型：看中文選英文、看圖示選英文、聽英文選英文。答對蓋 10 層，答錯減 5 層。
+    </p>
+  </header>
+
+  <div class="top-back-row">
+    <button class="btn btn-secondary" onclick="window.location.href='game.html'">
+      ⬅ 選擇其他遊戲
+    </button>
+    <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+      🏠 選擇其他主題
+    </button>
+  </div>
+
+  <main class="game-main-wrapper">
+    <aside class="game-sidebar">
+      <h2>本次練習</h2>
+      <p>主題：<span id="game-topics"></span></p>
+      <p>單字數：<span id="game-word-count">0</span> 個</p>
+      <p>目前樓層：<span id="stage3-floor">0</span> / 101</p>
+      <p class="sidebar-tip">每答對一次 +10 層，答錯 -5 層，蓋滿 101 層會有超級煙火慶祝！</p>
+    </aside>
+
+    <section class="game-main">
+      <section class="stage-panel active">
+        <div class="stage3-layout">
+          <div class="stage3-left">
+            <div class="stage3-question-box">
+              <div id="stage3-question-type" class="stage3-question-type"></div>
+              <div id="stage3-question-prompt" class="stage3-question-prompt"></div>
+              <button
+                id="stage3-repeat-question"
+                class="btn btn-audio big-btn right-audio-btn"
+                style="display:none;"
+              >
+                再聽一次 🔊
+              </button>
+            </div>
+
+            <div id="stage3-options" class="stage3-options"></div>
+
+            <div class="stage3-bottom-buttons">
+              <button id="stage3-next" class="btn btn-primary big-btn" disabled>
+                下一題 ➡
+              </button>
+              <button id="stage3-restart" class="btn btn-secondary big-btn">
+                🔁 重新開始
+              </button>
+            </div>
+
+            <p id="stage3-feedback" class="stage-feedback"></p>
+          </div>
+
+          <div class="stage3-right">
+            <div class="building-panel">
+              <div class="building-header">
+                101 大樓建造進度
+              </div>
+              <div class="building-visual-wrapper">
+                <div id="building-change" class="building-change">+10</div>
+                <div id="building-great" class="building-great"></div>
+                <div id="building-tower" class="building-tower"></div>
+              </div>
+              <p style="text-align:center;margin-top:6px;">
+                目前樓層：<strong id="building-floor-text">0 層</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- 煙火效果 -->
+  <div id="fireworks-overlay" class="fireworks-overlay hidden">
+    <div class="fireworks-content">
+      <div id="fireworks-text" class="fireworks-text">恭喜完成！</div>
+      <div class="fireworks-area">
+        <div class="firework f1"></div>
+        <div class="firework f2"></div>
+        <div class="firework f3"></div>
+        <div class="firework f4"></div>
+        <div class="firework f5"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/common.js"></script>
+  <script src="scripts/stage3.js"></script>
+</body>
+</html>
