@@ -27,8 +27,9 @@
       <h2>本次練習</h2>
       <p>主題：<span id="game-topics"></span></p>
       <p>單字數：<span id="game-word-count">0</span> 個</p>
-      <p>已裝滿的火車：<span id="stage4-done">0</span> / 10</p>
-      <p class="sidebar-tip">答對會加滿油，火車從右往左開走；答錯會漏油晃動，兩秒後進入下一題。</p>
+      <p class="sidebar-tip">
+        答對後裝滿貨物的火車，會從右往左開走；答錯會顯示冒煙晃動，兩秒後進入下一題。
+      </p>
     </aside>
 
     <section class="game-main">
@@ -37,11 +38,14 @@
           <!-- 上：題目 -->
           <div class="stage4-top">
             <div id="stage4-img" class="stage4-img">❓</div>
-            <div>
+            <div class="stage4-top-text">
               <div id="stage4-zh" class="stage4-zh"></div>
               <div class="stage4-en-hint">
                 題目會用英文念出單字，一起跟著唸唸看吧！
               </div>
+            </div>
+            <div class="stage4-done-display">
+              已裝滿的火車：<span id="stage4-done">0</span> / 10
             </div>
           </div>
 
@@ -57,7 +61,7 @@
 
             <!-- 下：字母池 -->
             <div class="letter-pool-wrapper">
-              <div class="letter-pool-label">請點下方字母卡，依序放到火車車廂上：</div>
+              <div class="letter-pool-label">請點下方字母卡，依序放到火車車廂上（點車廂可退回字母）：</div>
               <div id="stage4-letter-pool" class="letter-pool"></div>
             </div>
 
@@ -76,11 +80,21 @@
     </section>
   </main>
 
-  <!-- 煙火效果 -->
+  <!-- 煙火效果：同樣把 firework 變多 -->
   <div id="fireworks-overlay" class="fireworks-overlay hidden">
     <div class="fireworks-content">
       <div id="fireworks-text" class="fireworks-text">恭喜完成！</div>
       <div class="fireworks-area">
+        <div class="firework f1"></div>
+        <div class="firework f2"></div>
+        <div class="firework f3"></div>
+        <div class="firework f4"></div>
+        <div class="firework f5"></div>
+        <div class="firework f1"></div>
+        <div class="firework f2"></div>
+        <div class="firework f3"></div>
+        <div class="firework f4"></div>
+        <div class="firework f5"></div>
         <div class="firework f1"></div>
         <div class="firework f2"></div>
         <div class="firework f3"></div>
