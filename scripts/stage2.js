@@ -22,7 +22,6 @@ function startStage2Round() {
   feedbackEl.textContent = "";
   statusEl.textContent = "本局共有 6 組中英配對，試著全部配對成功！";
 
-  // 從所有單字中挑 6 個
   const shuffled = shuffleArray(ACTIVE_WORDS);
   stage2CurrentPairs = shuffled.slice(0, Math.min(6, shuffled.length));
 
@@ -53,19 +52,23 @@ function startStage2Round() {
     btn.dataset.wordId = c.id;
     btn.dataset.cardType = c.type;
 
-    const tagText = c.type === "zh" ? "中文" : "英文";
-
-    const emojiVisual = getWordVisual(c.word);
-
-    btn.innerHTML = `
-      <div class="match-card-inner">
-        <div class="match-icon">${emojiVisual}</div>
-        <div>
-          <div><strong>${c.type === "zh" ? c.word.zh : c.word.en}</strong></div>
-          <div class="match-tag">${tagText}</div>
+    if (c.type === "zh") {
+      // 中文：保留配圖，無「中文」標籤
+      const emojiVisual = getWordVisual(c.word);
+      btn.innerHTML = `
+        <div class="match-card-inner">
+          <div class="match-icon">${emojiVisual}</div>
+          <div><strong>${c.word.zh}</strong></div>
         </div>
-      </div>
-    `;
+      `;
+    } else {
+      // 英文：只有英文，不配圖、不標示「英文」
+      btn.innerHTML = `
+        <div class="match-card-inner">
+          <div><strong>${c.word.en}</strong></div>
+        </div>
+      `;
+    }
 
     btn.addEventListener("click", () => onStage2CardClick(btn, c.word));
     grid.appendChild(btn);
@@ -85,7 +88,6 @@ function onStage2CardClick(btn, word) {
 
   const feedbackEl = document.getElementById("stage2-feedback");
 
-  // 第一次選
   if (!stage2FirstCard) {
     stage2FirstCard = btn;
     btn.classList.add("selected");
@@ -95,9 +97,7 @@ function onStage2CardClick(btn, word) {
     return;
   }
 
-  // 第二次選
   if (btn === stage2FirstCard) {
-    // 點到同一張就取消選取
     btn.classList.remove("selected");
     stage2FirstCard = null;
     feedbackEl.textContent = "";
@@ -125,7 +125,6 @@ function onStage2CardClick(btn, word) {
     stage2FirstCard = null;
 
     if (stage2MatchedCount === stage2CurrentPairs.length) {
-      // 一局完成
       const statusEl = document.getElementById("stage2-status");
       statusEl.textContent = "本局全部配對完成！太厲害了～";
       showFireworks("🎆 太厲害了！本局配對完成！", 2800);
@@ -138,7 +137,6 @@ function onStage2CardClick(btn, word) {
     feedbackEl.classList.remove("ok");
     feedbackEl.classList.add("error");
     speak("Try again! 再試一次！", "en-US");
-    // 將兩張稍後取消選取
     const prev = stage2FirstCard;
     stage2FirstCard = null;
     setTimeout(() => {
