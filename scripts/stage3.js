@@ -77,18 +77,35 @@ function renderStage3Question() {
   const promptEl = document.getElementById("stage3-question-prompt");
   const repeatBtn = document.getElementById("stage3-repeat-question");
 
+  // 不顯示題型文字
+  typeEl.textContent = "";
   repeatBtn.style.display = "none";
 
   if (stage3QuestionType === "zh") {
-    typeEl.textContent = "題型：看中文選英文";
-    promptEl.innerHTML = `<span class="question-zh">${stage3CurrentWord.zh}</span>`;
+    // 看中文
+    promptEl.innerHTML = `
+      <div class="question-instruction">請看中文，選出正確的單字？</div>
+      <div class="question-body">
+        <span class="question-zh">${stage3CurrentWord.zh}</span>
+      </div>
+    `;
   } else if (stage3QuestionType === "img") {
-    typeEl.textContent = "題型：看圖示選英文";
+    // 看圖示
     const visual = getWordVisual(stage3CurrentWord);
-    promptEl.innerHTML = `<span class="question-img">${visual}</span>`;
+    promptEl.innerHTML = `
+      <div class="question-instruction">請看圖案，選出正確的單字？</div>
+      <div class="question-body question-img">
+        ${visual}
+      </div>
+    `;
   } else {
-    typeEl.textContent = "題型：聽英文選英文";
-    promptEl.textContent = "請聽題目，選出正確的英文單字。";
+    // 聽英文
+    promptEl.innerHTML = `
+      <div class="question-instruction">請聽英文，選出正確的單字？</div>
+      <div class="question-body question-listen">
+        請點右上角喇叭按鈕，再仔細聽一次題目。
+      </div>
+    `;
     repeatBtn.style.display = "inline-block";
     // 自動播放一次
     speak(stage3CurrentWord.en, "en-US");
@@ -209,8 +226,7 @@ function finishStage3Game() {
   feedbackEl.classList.remove("error");
   feedbackEl.classList.add("ok");
 
-  document.getElementById("stage3-question-type").textContent =
-    "任務完成";
+  document.getElementById("stage3-question-type").textContent = "";
   document.getElementById("stage3-question-prompt").textContent =
     "101 大樓已經蓋滿囉！";
 
