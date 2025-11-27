@@ -620,22 +620,6 @@ main {
   opacity: 0.3;
 }
 
-.match-tag {
-  display: inline-block;
-  padding: 2px 6px;
-  font-size: 11px;
-  border-radius: 999px;
-  background: #ccc;
-}
-
-.match-card-zh .match-tag {
-  background: #ffb347;
-}
-
-.match-card-en .match-tag {
-  background: #5b8bff;
-}
-
 /* -------- 第 3 階段：101 大樓 -------- */
 
 .stage3-layout {
@@ -734,7 +718,7 @@ main {
 
 .building-visual-wrapper {
   position: relative;
-  height: 220px;
+  height: 260px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -749,12 +733,14 @@ main {
   flex-direction: column-reverse;
   gap: 2px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  height: 220px;
+  overflow: hidden;
 }
 
 .building-block {
-  height: 6px;
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.9);
+  flex: 1 0 auto;
 }
 
 .building-change {
@@ -818,6 +804,17 @@ main {
   color: #555;
 }
 
+.stage4-top-text {
+  flex: 1;
+}
+
+/* 題目右側的「已裝滿火車」顯示 */
+.stage4-done-display {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e67e22;
+}
+
 .stage4-middle {
   display: flex;
   flex-direction: column;
@@ -846,7 +843,7 @@ main {
   display: flex;
   align-items: center;
   gap: 4px;
-  transition: transform 1.6s ease;
+  transition: transform 0.8s ease;
 }
 
 .train-head {
@@ -897,11 +894,20 @@ main {
 
 /* 火車動畫 */
 .train-move {
-  transform: translateX(-110%);
+  transform: translateX(-120%);
 }
 
-.train-leak {
-  animation: trainShake 0.3s ease-in-out 3;
+.train-smoke {
+  animation: trainShake 0.4s ease-in-out 3;
+  position: relative;
+}
+
+.train-smoke::after {
+  content: "💨";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-size: 18px;
 }
 
 @keyframes trainShake {
