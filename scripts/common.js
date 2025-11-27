@@ -4,9 +4,64 @@ let WORD_BANK = {};
 let activeTopics = [];
 let ACTIVE_WORDS = [];
 
+// --- 語音相關 ---
+let allVoices = [];
+let voicesLoaded = false;
+
+function loadVoices() {
+  allVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() || [] : [];
+  voicesLoaded = true;
+}
+
+if ("speechSynthesis" in window) {
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = () => {
+    loadVoices();
+  };
+}
+
+/**
+ * 依語系挑選一個 voice，優先女性
+ */
+function pickVoice(langPrefix) {
+  if (!voicesLoaded || !allVoices.length) return null;
+  const candidates = allVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix.toLowerCase()));
+  if (!candidates.length) return null;
+
+  // 優先挑名字看起來像女聲的
+  const femaleKeywords = ["female", "woman", "女", "Samantha", "Karen", "Susan", "Zira", "Joana", "Shelley"];
+  const female = candidates.find(v =>
+    femaleKeywords.some(k => v.name.toLowerCase().includes(k.toLowerCase()))
+  );
+  return female || candidates[0];
+}
+
+/**
+ * 朗讀文字
+ * lang: "en-US" / "zh-TW" 等
+ */
+function speak(text, lang = "en-US") {
+  if (!("speechSynthesis" in window)) return;
+  if (!text) return;
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = lang;
+
+  // 嘗試挑一個適合的 voice
+  let voice = null;
+  if (lang.toLowerCase().startsWith("en")) {
+    voice = pickVoice("en"); // 英文女聲
+  } else if (lang.toLowerCase().startsWith("zh")) {
+    // 台灣中文優先 zh-TW，其次 zh
+    voice = pickVoice("zh-TW") || pickVoice("zh");
+  }
+  if (voice) utter.voice = voice;
+
+  window.speechSynthesis.speak(utter);
+}
+
 /**
  * 讀取 word-bank.json，組出 activeTopics & ACTIVE_WORDS 後呼叫 callback
- * callback 會在資料準備好後被呼叫
  */
 async function loadWordBankCommon(callback) {
   try {
@@ -14,7 +69,6 @@ async function loadWordBankCommon(callback) {
     WORD_BANK = await res.json();
     console.log("字庫載入完成", WORD_BANK);
 
-    // 從 localStorage 讀取主題
     const saved = localStorage.getItem("selectedTopics");
     if (saved) {
       try {
@@ -26,26 +80,20 @@ async function loadWordBankCommon(callback) {
       }
     }
 
-    // 若沒有選，預設全部主題
     if (!activeTopics || activeTopics.length === 0) {
       activeTopics = Object.keys(WORD_BANK);
     }
 
-    // 合併所有主題的單字
     ACTIVE_WORDS = [];
     activeTopics.forEach((topic) => {
       const list = WORD_BANK[topic] || [];
       ACTIVE_WORDS = ACTIVE_WORDS.concat(list);
     });
 
-    if (typeof callback === "function") {
-      callback();
-    }
+    if (typeof callback === "function") callback();
   } catch (err) {
     console.error("讀取字庫失敗", err);
-    if (typeof callback === "function") {
-      callback(err);
-    }
+    if (typeof callback === "function") callback(err);
   }
 }
 
@@ -69,14 +117,6 @@ function shuffleArray(arr) {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
-}
-
-/** 朗讀文字 */
-function speak(text, lang = "en-US") {
-  if (!("speechSynthesis" in window)) return;
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = lang;
-  window.speechSynthesis.speak(utter);
 }
 
 /** 取得單字的視覺（優先 img，再來 emoji） */
