@@ -11,7 +11,7 @@ body {
   color: #222;
 }
 
-/* -------- 首頁樣式 -------- */
+/* -------- 首頁樣式（第一層：主題選擇） -------- */
 
 .home-body {
   min-height: 100vh;
@@ -151,13 +151,7 @@ body {
   display: inline-block;
 }
 
-/* 按鈕區 */
-.topic-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-}
-
+/* 按鈕共用樣式 */
 .btn {
   border-radius: 999px;
   border: none;
@@ -198,7 +192,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* footer */
 .home-footer {
   text-align: center;
   font-size: 12px;
@@ -206,7 +199,7 @@ body {
   padding: 10px 0 14px;
 }
 
-/* -------- game.html 簡單樣式 -------- */
+/* -------- 早期 game.html 簡易樣式（可留作一般頁面） -------- */
 
 header h1 {
   margin: 16px;
@@ -238,7 +231,7 @@ main {
   color: #0066cc;
 }
 
-/* -------- 遊戲主畫面基底 -------- */
+/* -------- 遊戲主畫面基底（第二層 & 第三層共用） -------- */
 
 .game-header {
   padding: 16px 20px 10px;
@@ -250,6 +243,7 @@ main {
   color: #555;
 }
 
+/* Game 主框架（第三層遊戲頁會用到） */
 .game-main-wrapper {
   max-width: 1100px;
   margin: 0 auto 40px;
@@ -289,7 +283,59 @@ main {
   flex: 1;
 }
 
-/* 階段切換按鈕 */
+/* 第二層 & 第三層：上方「選擇其他主題 / 遊戲」按鈕列 */
+.top-back-row {
+  max-width: 1100px;
+  margin: 6px auto 0;
+  padding: 0 16px;
+  text-align: right;
+}
+
+/* -------- 第二層 Game 首頁：四款遊戲選單 -------- */
+
+.game-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.game-menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px 10px;
+  box-shadow: 0 4px 12px rgba(15, 35, 95, 0.12);
+  color: #123055;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.game-menu-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 35, 95, 0.18);
+}
+
+.game-menu-icon {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.game-menu-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.game-menu-desc {
+  font-size: 13px;
+  color: #555;
+}
+
+/* -------- 共用：階段面板 -------- */
+
 .stage-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -316,7 +362,6 @@ main {
   transform: translateY(-1px);
 }
 
-/* 各階段面板 */
 .stage-panel {
   display: none;
   background: #ffffff;
