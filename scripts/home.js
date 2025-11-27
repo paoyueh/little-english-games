@@ -20,6 +20,21 @@ async function loadWordBankForHome() {
   }
 }
 
+// 由字庫抓一個代表 emoji（優先用第一個單字的 emoji）
+function getTopicEmoji(topicName) {
+  const list = WORD_BANK[topicName] || [];
+  if (list.length > 0 && list[0].emoji) {
+    // 如果是多個 emoji，用第一個
+    return list[0].emoji.toString().split(/\s+/)[0];
+  }
+  // 沒有就給一個通用圖示
+  if (topicName.toLowerCase().includes('weather') || topicName.includes('天氣')) return '🌤️';
+  if (topicName.toLowerCase().includes('animal') || topicName.includes('動物')) return '🐾';
+  if (topicName.toLowerCase().includes('fruit') || topicName.includes('水果')) return '🍎';
+  if (topicName.toLowerCase().includes('family') || topicName.includes('家庭')) return '👨‍👩‍👧‍👦';
+  return '📚';
+}
+
 // 畫出主題方框卡片
 function renderTopicCards() {
   const grid = document.getElementById('topic-grid');
@@ -38,7 +53,13 @@ function renderTopicCards() {
     card.className = 'topic-card';
     card.dataset.topic = topicName;
 
-    // 顯示名稱：先用英文主題名，之後如果要中譯可另外做 map
+    const emojiDiv = document.createElement('div');
+    emojiDiv.className = 'topic-emoji';
+    emojiDiv.textContent = getTopicEmoji(topicName);
+
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'topic-info';
+
     const title = document.createElement('div');
     title.className = 'topic-title';
     title.textContent = topicName;
@@ -48,15 +69,22 @@ function renderTopicCards() {
     const words = WORD_BANK[topicName] || [];
     count.textContent = `單字數：${words.length}`;
 
-    card.appendChild(title);
-    card.appendChild(count);
+    const selectedTag = document.createElement('div');
+    selectedTag.className = 'topic-selected-tag';
+    selectedTag.textContent = '✔ 已選取';
+
+    infoDiv.appendChild(title);
+    infoDiv.appendChild(count);
+    infoDiv.appendChild(selectedTag);
+
+    card.appendChild(emojiDiv);
+    card.appendChild(infoDiv);
 
     card.addEventListener('click', () => toggleTopicSelection(topicName, card));
-
     grid.appendChild(card);
   });
 
-  // 如果之前 localStorage 有選過主題，可以自動帶入
+  // 如果之前 localStorage 有選過主題，就自動還原
   const saved = localStorage.getItem('selectedTopics');
   if (saved) {
     try {
@@ -86,7 +114,6 @@ function toggleTopicSelection(topicName, cardElement) {
     cardElement.classList.add('selected');
   }
 
-  // 更新 localStorage
   localStorage.setItem('selectedTopics', JSON.stringify(Array.from(selectedTopics)));
   updateStartButtonState();
 }
@@ -109,9 +136,7 @@ function setupButtons() {
         alert('請先選擇至少一個主題！');
         return;
       }
-      // 再次確保 localStorage 內容是最新
       localStorage.setItem('selectedTopics', JSON.stringify(Array.from(selectedTopics)));
-      // 進入遊戲頁面
       window.location.href = 'game.html';
     });
   }
