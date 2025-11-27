@@ -24,6 +24,9 @@ function resetStage4Game() {
   stage4GameOver = false;
   document.getElementById("stage4-done").textContent = "0";
   document.getElementById("stage4-progress").textContent = "";
+  const startBtn = document.getElementById("stage4-start");
+  startBtn.disabled = false;
+  startBtn.textContent = "🚂 出發";
   prepareStage4Train();
 }
 
@@ -35,7 +38,8 @@ function prepareStage4Train() {
   const pool = document.getElementById("stage4-letter-pool");
   const progress = document.getElementById("stage4-progress");
 
-  train.classList.remove("train-move", "train-smoke");
+  train.classList.remove("train-move", "train-flash");
+  train.style.opacity = 1;
   cars.innerHTML = "";
   pool.innerHTML = "";
   progress.textContent = "";
@@ -145,8 +149,8 @@ function onStage4Start() {
     progress.textContent = "太棒了！拼字正確，火車出發囉～";
     speak(stage4CurrentWord.en, "en-US");
 
-    train.classList.remove("train-smoke");
-    train.classList.add("train-move");
+    train.classList.remove("train-flash");
+    train.classList.add("train-move"); // 從目前位置一路往左開到畫面外
 
     stage4DoneCount++;
     document.getElementById("stage4-done").textContent = stage4DoneCount.toString();
@@ -157,15 +161,25 @@ function onStage4Start() {
       } else {
         prepareStage4Train();
       }
-    }, 1700);
+    }, 1700); // 等火車跑完再換下一題
   } else {
-    progress.textContent = "這次拼錯了，火車冒煙晃動，換下一題試試看。";
+    progress.textContent = "這次拼錯了，火車閃一下後換下一題。";
+
     train.classList.remove("train-move");
-    train.classList.add("train-smoke");
+    train.classList.add("train-flash");
+    train.style.opacity = 1;
+
     speak("Oops! Try again! 再試一次！", "en-US");
 
-    // 無論有沒有拼字，都當作答錯，兩秒後下一題
+    // 閃一下之後讓火車淡出
     setTimeout(() => {
+      train.style.opacity = 0;
+    }, 600);
+
+    // 兩秒後直接換下一題
+    setTimeout(() => {
+      train.style.opacity = 1;
+      train.classList.remove("train-flash");
       prepareStage4Train();
     }, 2000);
   }
@@ -183,6 +197,9 @@ function finishStage4Game() {
 
   const cars = document.getElementById("stage4-train-cars");
   cars.innerHTML = "";
+
+  const train = document.getElementById("stage4-train");
+  train.style.opacity = 0;
 
   const startBtn = document.getElementById("stage4-start");
   startBtn.disabled = true;
