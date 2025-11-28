@@ -2,6 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>第 4 階段 - 火車載貨拼單字遊戲</title>
   <link rel="stylesheet" href="styles/style.css">
 </head>
@@ -35,18 +36,26 @@
     <section class="game-main">
       <section class="stage-panel active">
         <div class="stage4-layout">
-
-          <!-- 🔊 上方題目區（已新增喇叭按鈕） -->
+          <!-- 上方題目區 -->
           <div class="stage4-top">
             <div id="stage4-img" class="stage4-img">❔</div>
 
             <div class="stage4-top-text">
               <div id="stage4-zh" class="stage4-zh">——</div>
-              <div class="stage4-en-hint">題目會用英文念出單字，可以點喇叭重聽喔！</div>
+              <div class="stage4-en-hint">
+                題目會用英文念出單字，可以點喇叭重聽喔！
+              </div>
             </div>
 
-            <!-- 🔊 新增喇叭按鈕 -->
-            <button id="stage4-speak-btn" class="btn-audio stage4-audio-btn">🔊</button>
+            <!-- 喇叭按鈕（記得 id 一定要是 stage4-audio-btn） -->
+            <button
+              id="stage4-audio-btn"
+              type="button"
+              class="stage4-audio-btn"
+              aria-label="重播英文發音"
+            >
+              🔊
+            </button>
 
             <div id="stage4-done-wrapper" class="stage4-done-display">
               已裝滿的火車：<span id="stage4-done">0</span> / 10
@@ -71,10 +80,14 @@
             </div>
           </div>
 
-          <!-- 下方按鈕 -->
+          <!-- 下方按鈕區 -->
           <div class="stage4-controls">
-            <button id="stage4-start" class="btn btn-primary big-btn">🚆 出發</button>
-            <button id="stage4-reset" class="btn btn-secondary big-btn">🔁 重新開始</button>
+            <button id="stage4-start" class="btn btn-primary big-btn">
+              🚆 出發
+            </button>
+            <button id="stage4-reset" class="btn btn-secondary big-btn">
+              🔁 重新開始
+            </button>
           </div>
 
           <p id="stage4-progress" class="stage4-progress"></p>
@@ -83,7 +96,7 @@
     </section>
   </main>
 
-  <!-- 煙火效果 -->
+  <!-- 煙火效果（共用） -->
   <div id="fireworks-overlay" class="fireworks-overlay hidden">
     <div class="fireworks-content">
       <div id="fireworks-text" class="fireworks-text">恭喜完成！</div>
