@@ -1160,3 +1160,20 @@ main {
     grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
 }
+
+/* 🔊 第四階段題目喇叭播放按鈕 */
+.stage4-audio-btn {
+  margin-left: 10px;
+  padding: 6px 12px;
+  font-size: 20px;
+  background: #ffffff;
+  border: 1px solid #d0d8ff;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.10);
+  transition: background 0.15s ease;
+}
+
+.stage4-audio-btn:hover {
+  background: #eef3ff;
+}
