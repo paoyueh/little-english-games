@@ -1,218 +1,189 @@
-// scripts/stage4.js
+/* --------------------------
+   第 4 階段 – 火車載貨遊戲
+--------------------------- */
 
-let stage4CurrentWord = null;
-let stage4Answer = "";
-let stage4DoneCount = 0;
-let stage4GameOver = false;
+let stage4Words = [];
+let stage4Index = 0;
+let stage4Correct = 0;
+let currentWord4 = null;
 
-function initStage4Page() {
-  renderGameInfoCommon();
+let stage4Audio = new Audio();  // 🔊 用來播放英文題目
 
-  document.getElementById("stage4-start").addEventListener("click", () => {
-    onStage4Start();
-  });
+window.onload = async () => {
+  const params = loadGameParams();
+  stage4Words = params.words;
+  document.getElementById("game-topics").textContent = params.topicNames;
+  document.getElementById("game-word-count").textContent = stage4Words.length;
 
-  document.getElementById("stage4-reset").addEventListener("click", () => {
-    resetStage4Game();
-  });
+  shuffle(stage4Words);
+  loadStage4Question();
+  bindStage4Events();
+};
 
-  resetStage4Game();
+/* --------------------------
+   載入題目
+--------------------------- */
+function loadStage4Question() {
+  currentWord4 = stage4Words[stage4Index];
+
+  document.getElementById("stage4-img").innerHTML =
+    currentWord4.icon || `<span style="font-size:40px;">❔</span>`;
+
+  document.getElementById("stage4-zh").textContent = currentWord4.zh;
+  document.getElementById("stage4-progress").textContent =
+    `第 ${stage4Index + 1} 題 / ${stage4Words.length} 題`;
+
+  // 🔊 更新音訊
+  if (currentWord4.enAudio) {
+    stage4Audio.src = currentWord4.enAudio;
+    stage4Audio.play(); // 題目剛出來播放一次
+  }
+
+  setupTrainSlots(currentWord4.en);
+  setupLetterPool(currentWord4.en);
 }
 
-function resetStage4Game() {
-  stage4DoneCount = 0;
-  stage4GameOver = false;
-  document.getElementById("stage4-done").textContent = "0";
-  document.getElementById("stage4-progress").textContent = "";
-  prepareStage4Train();
-}
+/* --------------------------
+   建立火車車廂
+--------------------------- */
+function setupTrainSlots(word) {
+  const area = document.getElementById("stage4-train-cars");
+  area.innerHTML = "";
 
-function prepareStage4Train() {
-  if (stage4GameOver) return;
-
-  const train = document.getElementById("stage4-train");
-  const cars = document.getElementById("stage4-train-cars");
-  const pool = document.getElementById("stage4-letter-pool");
-  const progress = document.getElementById("stage4-progress");
-
-  // 重置火車狀態
-  train.classList.remove("train-move", "train-flash");
-  train.style.visibility = "visible";
-  train.style.transition = "none";
-  train.style.transform = "translateX(0)";
-
-  cars.innerHTML = "";
-  pool.innerHTML = "";
-  progress.textContent = "";
-
-  // 隨機挑一個單字
-  const randIndex = Math.floor(Math.random() * ACTIVE_WORDS.length);
-  stage4CurrentWord = ACTIVE_WORDS[randIndex];
-
-  const zh = stage4CurrentWord.zh;
-  const visual = getWordVisual(stage4CurrentWord);
-
-  document.getElementById("stage4-zh").textContent = zh;
-  document.getElementById("stage4-img").innerHTML = visual;
-
-  // 題目一出來念一次英文
-  speak(stage4CurrentWord.en, "en-US");
-
-  // 正確拼字（只保留 a-z）
-  stage4Answer = (stage4CurrentWord.en || "")
-    .toLowerCase()
-    .replace(/[^a-z]/g, "");
-
-  const letters = stage4Answer.split("");
-
-  // 建立車廂 slot
-  letters.forEach(() => {
+  [...word].forEach(() => {
     const slot = document.createElement("div");
     slot.className = "letter-slot";
-    slot.addEventListener("click", () => onStage4SlotClick(slot));
-    cars.appendChild(slot);
-  });
-
-  // 建立字母池（亂數順序）
-  const shuffled = shuffleArray(letters);
-  shuffled.forEach((ch, idx) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "letter-tile big-letter";
-    btn.textContent = ch.toUpperCase();
-    btn.dataset.char = ch;
-    btn.dataset.index = String(idx);
-    btn.addEventListener("click", () => onStage4LetterClick(btn));
-    pool.appendChild(btn);
-  });
-}
-
-function onStage4LetterClick(btn) {
-  if (stage4GameOver) return;
-  if (btn.disabled) return;
-
-  const cars = document.querySelectorAll("#stage4-train-cars .letter-slot");
-  const empty = Array.from(cars).find((s) => !s.dataset.char);
-  if (!empty) return;
-
-  const ch = btn.dataset.char;
-  empty.textContent = ch.toUpperCase();
-  empty.dataset.char = ch;
-  empty.dataset.btnIndex = btn.dataset.index;
-
-  btn.disabled = true;
-  btn.classList.add("used");
-}
-
-function onStage4SlotClick(slot) {
-  if (stage4GameOver) return;
-  if (!slot.dataset.char) return;
-
-  const btnIndex = slot.dataset.btnIndex;
-  if (btnIndex != null) {
-    const poolBtn = document.querySelector(
-      `#stage4-letter-pool .letter-tile[data-index="${btnIndex}"]`
-    );
-    if (poolBtn) {
-      poolBtn.disabled = false;
-      poolBtn.classList.remove("used");
-    }
-  }
-
-  slot.textContent = "";
-  delete slot.dataset.char;
-  delete slot.dataset.btnIndex;
-}
-
-function onStage4Start() {
-  if (stage4GameOver) return;
-
-  const train = document.getElementById("stage4-train");
-  const area = document.getElementById("stage4-train-area");
-  const cars = document.querySelectorAll("#stage4-train-cars .letter-slot");
-  const progress = document.getElementById("stage4-progress");
-
-  const spelling = Array.from(cars)
-    .map((s) => s.dataset.char || "")
-    .join("");
-
-  const correct = spelling === stage4Answer && spelling.length > 0;
-
-  if (correct) {
-    // ✅ 答對：火車一路開到內容區塊最左側，再換下一題
-    progress.textContent = "太棒了！拼字正確，火車出發囉～";
-    speak(stage4CurrentWord.en, "en-US");
-
-    // 計算要往左移動多少距離：從目前位置 → 左邊界
-    const areaWidth = area.clientWidth;
-    const trainWidth = train.offsetWidth;
-    let distance = areaWidth - trainWidth;
-    if (distance < 0) distance = 0;
-
-    // 先重置，再啟動動畫
-    train.classList.remove("train-flash");
-    train.style.transition = "none";
-    train.style.transform = "translateX(0)";
-
-    // 下一幀才加 transition，避免瞬移
-    requestAnimationFrame(() => {
-      train.style.transition = "transform 1.2s ease";
-      train.style.transform = `translateX(-${distance}px)`;
-    });
-
-    stage4DoneCount++;
-    document.getElementById("stage4-done").textContent =
-      stage4DoneCount.toString();
-
-    setTimeout(() => {
-      if (stage4DoneCount >= 10) {
-        finishStage4Game();
-      } else {
-        prepareStage4Train();
+    slot.onclick = () => {
+      if (slot.textContent !== "") {
+        const letter = slot.textContent;
+        slot.textContent = "";
+        addLetterToPool(letter);
       }
-    }, 1300);
-  } else {
-    // ❌ 答錯：閃一下後換題
-    progress.textContent = "這次拼錯了，火車閃一下，換下一題試試看。";
-
-    train.classList.remove("train-move");
-    train.classList.add("train-flash");
-
-    speak("Oops! Try again! 再試一次！", "en-US");
-
-    setTimeout(() => {
-      train.style.visibility = "hidden";
-    }, 700);
-
-    setTimeout(() => {
-      prepareStage4Train();
-    }, 2000);
-  }
+    };
+    area.appendChild(slot);
+  });
 }
 
-function finishStage4Game() {
-  stage4GameOver = true;
-  const progress = document.getElementById("stage4-progress");
-  progress.textContent = "十輛火車都成功出發！恭喜完成～";
-
-  showFireworks("🎆 火車全部裝滿啦！恭喜完成！", 3200);
-
+/* --------------------------
+   字母庫
+--------------------------- */
+function setupLetterPool(word) {
   const pool = document.getElementById("stage4-letter-pool");
   pool.innerHTML = "";
 
-  const cars = document.getElementById("stage4-train-cars");
-  cars.innerHTML = "";
+  let letters = shuffle([...word.split("")]);
 
-  const startBtn = document.getElementById("stage4-start");
-  startBtn.disabled = true;
-
-  const resetBtn = document.getElementById("stage4-reset");
-  resetBtn.textContent = "🔁 再玩一次";
-  resetBtn.disabled = false;
+  letters.forEach((L) => {
+    addLetterToPool(L);
+  });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadWordBankCommon(() => {
-    initStage4Page();
-  });
-});
+function addLetterToPool(letter) {
+  const pool = document.getElementById("stage4-letter-pool");
+
+  const div = document.createElement("div");
+  div.className = "letter-slot big-letter";
+  div.textContent = letter;
+
+  div.onclick = () => addLetterToTrain(div);
+
+  pool.appendChild(div);
+}
+
+function addLetterToTrain(tile) {
+  const slots = document.querySelectorAll("#stage4-train-cars .letter-slot");
+
+  for (let slot of slots) {
+    if (slot.textContent === "") {
+      slot.textContent = tile.textContent;
+      tile.remove();
+      break;
+    }
+  }
+}
+
+/* --------------------------
+   綁定按鈕
+--------------------------- */
+function bindStage4Events() {
+  document.getElementById("stage4-start").onclick = checkTrainWord;
+  document.getElementById("stage4-reset").onclick = resetStage4;
+
+  // 🔊 喇叭播放英文
+  document.getElementById("stage4-speak-btn").onclick = () => {
+    if (currentWord4?.enAudio) {
+      stage4Audio.currentTime = 0;
+      stage4Audio.play();
+    }
+  };
+}
+
+/* --------------------------
+   檢查答案
+--------------------------- */
+function checkTrainWord() {
+  const slots = [...document.querySelectorAll("#stage4-train-cars .letter-slot")];
+  const answer = slots.map((s) => s.textContent).join("");
+
+  if (answer.toLowerCase() === currentWord4.en.toLowerCase()) {
+    stage4Correct++;
+    document.getElementById("stage4-done").textContent = stage4Correct;
+
+    moveTrainAway();
+    nextStage4Question();
+  } else {
+    flashTrain();
+    setTimeout(nextStage4Question, 1500);
+  }
+}
+
+/* --------------------------
+   火車動畫
+--------------------------- */
+function moveTrainAway() {
+  const train = document.getElementById("stage4-train");
+  train.classList.add("train-move");
+
+  setTimeout(() => {
+    train.classList.remove("train-move");
+  }, 900);
+}
+
+function flashTrain() {
+  const train = document.getElementById("stage4-train");
+  train.classList.add("train-flash");
+  setTimeout(() => train.classList.remove("train-flash"), 600);
+}
+
+/* --------------------------
+   下一題
+--------------------------- */
+function nextStage4Question() {
+  stage4Index++;
+  if (stage4Index >= stage4Words.length || stage4Correct >= 10) {
+    setTimeout(showFireworks, 300);
+    return;
+  }
+  loadStage4Question();
+}
+
+/* --------------------------
+   重置
+--------------------------- */
+function resetStage4() {
+  stage4Index = 0;
+  stage4Correct = 0;
+  document.getElementById("stage4-done").textContent = 0;
+  loadStage4Question();
+}
+
+/* --------------------------
+   煙火
+--------------------------- */
+function showFireworks() {
+  document.getElementById("fireworks-overlay").classList.remove("hidden");
+  setTimeout(() => {
+    document.getElementById("fireworks-overlay").classList.add("hidden");
+    resetStage4();
+  }, 2500);
+}
